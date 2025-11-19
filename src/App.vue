@@ -22,8 +22,8 @@ const randomQuestionsBottom = ref(allRandomQuestions.value.slice(3, 6));
 
 const possibleAnswers = computed(() => {
   const arr = [];
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
+  for (let col = 0; col < cols; col++) {
+    for (let row = 0; row < rows; row++) {
       const horizontal = randomQuestionsBottom.value[row][1];
       const vertical = randomQuestionsTop.value[col][1];
       // объединяем пересечение двух массивов
@@ -43,7 +43,7 @@ const selectedCountry = ref("")
 function handleClick(cell) {
   // если в ячейке уже есть ответ — ничего не делаем
   if (answers.value[cell - 1]) return;
-  
+
   selectedCell.value = cell;
   showModal.value = true
 }
@@ -80,7 +80,7 @@ function refreshQuestions() {
 <template>
   <div class="full-page">
     <!-- Модальное окно -->
-    <CountryInput :show="showModal" @close="closeModal" @select="handleSelect"/>
+    <CountryInput :show="showModal" @close="closeModal" @select="handleSelect" />
 
     <div class="nav-container">Вверхний навбар</div>
 
@@ -103,7 +103,8 @@ function refreshQuestions() {
             {{ question[0] }}
           </div>
           <!-- Ответы-->
-          <div class="cell-item" v-for="cell in cells" @click="handleClick(cell)" :class="{ filled: answers[cell - 1] }">
+          <div class="cell-item" v-for="cell in cells" @click="handleClick(cell)"
+            :class="{ filled: answers[cell - 1] }">
             <div v-if="answers[cell - 1]" class="cell-answer">{{ answers[cell - 1] }}</div>
           </div>
         </div>
@@ -164,13 +165,14 @@ function refreshQuestions() {
   margin-right: 10px;
 }
 
-.cell-item , .cell-item-quest {
+.cell-item,
+.cell-item-quest {
   display: flex;
   justify-content: center;
-  
+
   border-radius: 5px;
   min-width: 125px;
-  min-height: 125px; 
+  min-height: 125px;
   box-sizing: border-box;
   font-size: small;
 }
@@ -180,7 +182,7 @@ function refreshQuestions() {
   cursor: pointer;
   margin-bottom: 10px;
   align-items: end;
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
 }
 
 .cell-item:hover {
@@ -196,7 +198,7 @@ function refreshQuestions() {
   box-shadow: 3px 3px 10px rgb(90, 90, 135);
   margin: 0 10px 10px 0;
   padding: 5px;
-  align-items: center; 
+  align-items: center;
   text-align: center;
   color: white;
   background: rgb(100, 100, 150);
