@@ -2,7 +2,7 @@ name: Deploy app
 
 on:
   push:
-    branches: [ main ]   # запускается при пушах в main
+    branches: [ master ]   # запускается при пушах в main
 
 jobs:
   build-and-deploy:
