@@ -144,12 +144,12 @@ function refreshQuestions() {
 
             <div v-if="answers[cell - 1]">
               <template v-if="getFlag(answers[cell - 1]).type === 'flag-icons'">
-                <span :class="`fi fi-${getFlag(answers[cell - 1]).value}`" style="font-size: 48px;">
-                </span>
+                <div><span class="flag-icon" :class="`fi fi-${getFlag(answers[cell - 1]).value}`"></span></div>
+                
               </template>
 
               <template v-else>
-                <img :src="getFlag(answers[cell - 1]).value" style="width: 64px; height: 48px;">
+                <div class="flag-icon"><img :src="getFlag(answers[cell - 1]).value"></div>
               </template>
             </div>
 
@@ -161,17 +161,17 @@ function refreshQuestions() {
 
         <div class="cells-stats">
           <div class="cell-item-quest stats-item">
-            <div class="stat-value"><span class="material-symbols-outlined share" @click="refreshQuestions">replay</span></div>
-            <div >Начать заново</div>
+            <div class="stat-icon"><span class="material-symbols-outlined share" @click="refreshQuestions">replay</span></div>
+            <div class="stat-text">Начать заново</div>
           </div>
 
           <div v-for="(value, key) in stats" :key="key"  class="cell-item-quest stats-item">
             <div class="stat-value">{{ value }}</div>
-            <div>{{ key }}</div>
+            <div class="stat-text">{{ key }}</div>
           </div>
           <div class="cell-item-quest stats-item">
-            <div class="stat-value"><span class="material-symbols-outlined share">share</span></div>
-            <div >Поделиться:</div>
+            <div class="stat-icon"><span class="material-symbols-outlined share">share</span></div>
+            <div class="stat-text">Поделиться:</div>
           </div>
         </div>
       </div>
@@ -182,125 +182,4 @@ function refreshQuestions() {
 </template>
 
 <style scoped>
-.full-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.center-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px black solid;
-  border-radius: 5px;
-  height: 80%;
-  padding: 1rem;
-}
-
-.nav-container {
-  display: flex;
-  justify-content: center;
-  border: 1px black solid;
-  border-radius: 5px;
-  height: 10%;
-}
-
-.pg-con {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
-
-.cells-ans {
-  justify-content: center;
-  display: grid;
-  grid-template-columns: repeat(3, 125px);
-  grid-template-rows: repeat(4, 125px);
-  gap: 10px;
-  margin-top: 25px;
-}
-
-.cells-quest {
-  display: grid;
-  grid-template-rows: repeat(3, 125px);
-  max-width: 125px;
-  gap: 10px;
-  margin-top: 160px;
-  margin-right: 10px;
-}
-
-.cells-stats {
-  display: grid;
-  grid-template-rows: repeat(4, 125px);
-  max-width: 125px;
-  gap: 10px;
-  margin: 25px 10px 0 10px;
-}
-
-.cell-item-quest {
-  display: flex;
-  justify-content: center;
-  border-radius: 5px;
-  min-width: 125px;
-  min-height: 125px;
-  box-sizing: border-box;
-  font-size: small;
-}
-
-.cell-item-quest.stats-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  gap: 10px;
-  padding: 10px 0px;
-}
-
-.stat-value {
-  font-size: 32px;
-}
-
-.share {
-  cursor: pointer;
-  font-size: 32px;
-}
-
-.cell-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  min-width: 125px;
-  min-height: 125px;
-  box-sizing: border-box;
-  font-size: small;
-  border: 1px black solid;
-  cursor: pointer;
-}
-
-.cell-item:hover {
-  background: #6b7f89;
-}
-
-.cell-item.filled {
-  background: #a1adb2;
-  cursor: default;
-}
-
-.cell-item-quest {
-  box-shadow: 3px 3px 10px rgb(90, 90, 135);
-  margin: 0 10px 10px 0;
-  padding: 5px;
-  align-items: center;
-  text-align: center;
-  color: white;
-  background: rgb(100, 100, 150);
-}
-
-.cell-answer {
-  font-weight: bold;
-  color: #333;
-}
 </style>
