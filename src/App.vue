@@ -2,11 +2,14 @@
 import { ref, computed } from "vue";
 import { questions } from "./data/questions";
 import CountryInput from "./components/CountryInput.vue";
+import { countryCodes } from "./data/countryCodes";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 const rows = 3;
 const cols = 3;
 const cells = 9;
 const answers = ref(Array(cells).fill(""));
+const answersMessages = ref(Array(cells).fill(""));
 
 function getRandomUniqueQuestions(count) {
   const shuffled = [...questions].sort(() => Math.random() - 0.5);
@@ -63,11 +66,35 @@ function handleSelect(country) {
   if (validCountries.includes(country)) {
     answers.value[idx] = country; // ✅ верный ответ
   } else {
-    answers.value[idx] = `❌ ${country}`; // ❌ неверный
+    answers.value[idx] = country; // ❌ неверный
+    answersMessages.value[idx] = "❌"
   }
 
   showModal.value = false;
 }
+
+// Поиск флага выбранной страны
+const getFlag = (countryName) => {
+  const code = countryCodes[countryName];
+
+  // ISO-код найден → flag-icons
+  if (code) {
+    return { type: "flag-icons", value: code };
+  }
+
+  // Локальный svg
+  try {
+    const url = new URL(
+      `./assets/FlagsNoInISO/${countryName}.svg`,
+      import.meta.url
+    ).href;
+
+    return { type: "local", value: url };
+  } catch (e) {
+    console.warn("Флаг не найден:", countryName);
+    return { type: "local", value: "" };
+  }
+};
 
 function refreshQuestions() {
   const newSet = getRandomUniqueQuestions(6);
@@ -105,7 +132,21 @@ function refreshQuestions() {
           <!-- Ответы-->
           <div class="cell-item" v-for="cell in cells" @click="handleClick(cell)"
             :class="{ filled: answers[cell - 1] }">
-            <div v-if="answers[cell - 1]" class="cell-answer">{{ answers[cell - 1] }}</div>
+
+            <div v-if="answers[cell - 1]">
+              <template v-if="getFlag(answers[cell - 1]).type === 'flag-icons'">
+                <span :class="`fi fi-${getFlag(answers[cell - 1]).value}`" style="font-size: 48px;">
+                </span>
+              </template>
+
+              <template v-else>
+                <img :src="getFlag(answers[cell - 1]).value" style="width: 64px; height: 48px;">
+              </template>
+            </div>
+
+            <div v-if="answers[cell - 1]" class="cell-answer">
+              {{ answers[cell - 1] }} {{ answersMessages[cell - 1] }}
+            </div>
           </div>
         </div>
       </div>
@@ -165,11 +206,9 @@ function refreshQuestions() {
   margin-right: 10px;
 }
 
-.cell-item,
 .cell-item-quest {
   display: flex;
   justify-content: center;
-
   border-radius: 5px;
   min-width: 125px;
   min-height: 125px;
@@ -178,11 +217,17 @@ function refreshQuestions() {
 }
 
 .cell-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  min-width: 125px;
+  min-height: 125px;
+  box-sizing: border-box;
+  font-size: small;
   border: 1px black solid;
   cursor: pointer;
-  margin-bottom: 10px;
-  align-items: end;
-  padding-bottom: 10px;
 }
 
 .cell-item:hover {
