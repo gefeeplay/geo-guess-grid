@@ -9,7 +9,13 @@ const rows = 3;
 const cols = 3;
 const cells = 9;
 const answers = ref(Array(cells).fill(""));
+const points = ref(0);
+const mistakes = ref(0);
 const answersMessages = ref(Array(cells).fill(""));
+const stats = ref({
+  "Очки": points,
+  "Ошибки": mistakes,
+})
 
 function getRandomUniqueQuestions(count) {
   const shuffled = [...questions].sort(() => Math.random() - 0.5);
@@ -18,17 +24,17 @@ function getRandomUniqueQuestions(count) {
 
 // выбираем 6 случайных вопросов без повторений
 const allRandomQuestions = ref(getRandomUniqueQuestions(6));
-// первые 3 — верхние
-const randomQuestionsTop = ref(allRandomQuestions.value.slice(0, 3));
-// следующие 3 — нижние
-const randomQuestionsBottom = ref(allRandomQuestions.value.slice(3, 6));
+// первые 3 — слева
+const randomQuestionsLeft = ref(allRandomQuestions.value.slice(0, 3));
+// следующие 3 — сверху
+const randomQuestionsTop = ref(allRandomQuestions.value.slice(3, 6));
 
 const possibleAnswers = computed(() => {
   const arr = [];
   for (let col = 0; col < cols; col++) {
     for (let row = 0; row < rows; row++) {
-      const horizontal = randomQuestionsBottom.value[row][1];
-      const vertical = randomQuestionsTop.value[col][1];
+      const horizontal = randomQuestionsTop.value[row][1];
+      const vertical = randomQuestionsLeft.value[col][1];
       // объединяем пересечение двух массивов
       const possible = horizontal.filter((country) =>
         vertical.includes(country)
@@ -43,6 +49,7 @@ const selectedCell = ref(null);
 const showModal = ref(false)
 const selectedCountry = ref("")
 
+//Обработка клика по ячейке
 function handleClick(cell) {
   // если в ячейке уже есть ответ — ничего не делаем
   if (answers.value[cell - 1]) return;
@@ -55,7 +62,6 @@ function closeModal() {
   showModal.value = false
 }
 
-
 /* Обработка выбранной страны*/
 function handleSelect(country) {
   selectedCountry.value = country;
@@ -65,9 +71,11 @@ function handleSelect(country) {
 
   if (validCountries.includes(country)) {
     answers.value[idx] = country; // ✅ верный ответ
+    points.value += 1; //Добавляем очки
   } else {
     answers.value[idx] = country; // ❌ неверный
     answersMessages.value[idx] = "❌"
+    mistakes.value += 1; //Добавляем ошибки
   }
 
   showModal.value = false;
@@ -96,10 +104,11 @@ const getFlag = (countryName) => {
   }
 };
 
+// Обновление вопросов
 function refreshQuestions() {
   const newSet = getRandomUniqueQuestions(6);
-  randomQuestionsTop.value = newSet.slice(0, 3);
-  randomQuestionsBottom.value = newSet.slice(3, 6);
+  randomQuestionsLeft.value = newSet.slice(0, 3);
+  randomQuestionsTop.value = newSet.slice(3, 6);
 }
 
 </script>
@@ -119,14 +128,14 @@ function refreshQuestions() {
       <div class="pg-con">
         <!-- Вопросы вертикально-->
         <div class="cells-quest">
-          <div v-for="(question, index) in randomQuestionsTop" :key="'top-' + index" class="cell-item-quest">
+          <div v-for="(question, index) in randomQuestionsLeft" :key="'top-' + index" class="cell-item-quest">
             {{ question[0] }}
           </div>
         </div>
 
         <div class="cells-ans">
           <!-- Вопросы горизонтально-->
-          <div v-for="(question, index) in randomQuestionsBottom" :key="'bottom-' + index" class="cell-item-quest">
+          <div v-for="(question, index) in randomQuestionsTop" :key="'bottom-' + index" class="cell-item-quest">
             {{ question[0] }}
           </div>
           <!-- Ответы-->
@@ -147,6 +156,22 @@ function refreshQuestions() {
             <div v-if="answers[cell - 1]" class="cell-answer">
               {{ answers[cell - 1] }} {{ answersMessages[cell - 1] }}
             </div>
+          </div>
+        </div>
+
+        <div class="cells-stats">
+          <div class="cell-item-quest stats-item">
+            <div class="stat-value"><span class="material-symbols-outlined share" @click="refreshQuestions">replay</span></div>
+            <div >Начать заново</div>
+          </div>
+
+          <div v-for="(value, key) in stats" :key="key"  class="cell-item-quest stats-item">
+            <div class="stat-value">{{ value }}</div>
+            <div>{{ key }}</div>
+          </div>
+          <div class="cell-item-quest stats-item">
+            <div class="stat-value"><span class="material-symbols-outlined share">share</span></div>
+            <div >Поделиться:</div>
           </div>
         </div>
       </div>
@@ -206,6 +231,14 @@ function refreshQuestions() {
   margin-right: 10px;
 }
 
+.cells-stats {
+  display: grid;
+  grid-template-rows: repeat(4, 125px);
+  max-width: 125px;
+  gap: 10px;
+  margin: 25px 10px 0 10px;
+}
+
 .cell-item-quest {
   display: flex;
   justify-content: center;
@@ -214,6 +247,23 @@ function refreshQuestions() {
   min-height: 125px;
   box-sizing: border-box;
   font-size: small;
+}
+
+.cell-item-quest.stats-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 10px;
+  padding: 10px 0px;
+}
+
+.stat-value {
+  font-size: 32px;
+}
+
+.share {
+  cursor: pointer;
+  font-size: 32px;
 }
 
 .cell-item {
