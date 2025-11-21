@@ -120,11 +120,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 5px;
   border-radius: 5px;
   min-width: 125px;
   min-height: 125px;
   box-sizing: border-box;
-  font-size: small;
+  font-size: x-small;
   border: 1px black solid;
   cursor: pointer;
 }
@@ -133,13 +134,34 @@ body {
   background: #6b7f89;
 }
 
-.cell-item.filled {
-  background: #a1adb2;
-  cursor: default;
+/* Оформление ячейки с ответом*/
+.correct {
+  background: #72b472 !important;  /* зелёный */
+  color: white;
+  border-color: #3d8b3d;
+  animation: pop 0.3s ease-out;
 }
 
-.flag-icon {
-  width: 64px; 
+.wrong {
+  background: #d46f6b !important;  /* красный */
+  color: white;
+  border-color: #b52b27;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.flag-icon, .flag-icon img {
+  width: 64px !important;
   height: 48px;
 }
 
@@ -154,6 +176,8 @@ body {
 }
 
 .cell-answer {
+  text-align: center;
+  padding: 0px 5px;
   font-weight: bold;
   color: #333;
 }
@@ -214,7 +238,7 @@ body {
     font-size: 20px !important;
   }
 
-  .flag-icon {
+  .flag-icon, .flag-icon img  {
     width:44.8px  !important;
     height: 33.6px !important;
   }

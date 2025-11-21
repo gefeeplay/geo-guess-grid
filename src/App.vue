@@ -11,7 +11,6 @@ const cells = 9;
 const answers = ref(Array(cells).fill(""));
 const points = ref(0);
 const mistakes = ref(0);
-const answersMessages = ref(Array(cells).fill(""));
 const stats = ref({
   "Очки": points,
   "Ошибки": mistakes,
@@ -69,13 +68,18 @@ function handleSelect(country) {
   const idx = selectedCell.value - 1;
   const validCountries = possibleAnswers.value[idx];
 
-  if (validCountries.includes(country)) {
-    answers.value[idx] = country; // ✅ верный ответ
-    points.value += 1; //Добавляем очки
+  const isCorrect = validCountries.includes(country);  //правильность ответа
+
+  //Ответ: страна и корректность
+  answers.value[idx] = {
+    country,
+    correct: isCorrect
+  };
+
+  if (isCorrect) {
+    points.value += 1;
   } else {
-    answers.value[idx] = country; // ❌ неверный
-    answersMessages.value[idx] = "❌"
-    mistakes.value += 1; //Добавляем ошибки
+    mistakes.value += 1;
   }
 
   showModal.value = false;
@@ -109,6 +113,9 @@ function refreshQuestions() {
   const newSet = getRandomUniqueQuestions(6);
   randomQuestionsLeft.value = newSet.slice(0, 3);
   randomQuestionsTop.value = newSet.slice(3, 6);
+  answers.value = Array(cells).fill("");
+  points.value = 0;
+  mistakes.value = 0;
 }
 
 </script>
@@ -117,7 +124,7 @@ function refreshQuestions() {
   <div class="full-page">
     <!-- Модальное окно -->
     <CountryInput :show="showModal" @close="closeModal" @select="handleSelect" />
-
+    
     <div class="nav-container">Вверхний навбар</div>
 
     <div class="center-container">
@@ -139,22 +146,37 @@ function refreshQuestions() {
             {{ question[0] }}
           </div>
           <!-- Ответы-->
-          <div class="cell-item" v-for="cell in cells" @click="handleClick(cell)"
-            :class="{ filled: answers[cell - 1] }">
+          <div class="cell-item"
+            v-for="cell in cells"
+            @click="handleClick(cell)"
+            :class="{
+              filled: answers[cell - 1],
+              correct: answers[cell - 1]?.correct === true,
+              wrong: answers[cell - 1]?.correct === false
+            }">
 
-            <div v-if="answers[cell - 1]">
-              <template v-if="getFlag(answers[cell - 1]).type === 'flag-icons'">
-                <div><span class="flag-icon" :class="`fi fi-${getFlag(answers[cell - 1]).value}`"></span></div>
-                
-              </template>
+            <!-- Флаг страны-->
+           <div v-if="answers[cell - 1]">
+            <template v-if="getFlag(answers[cell - 1].country).type === 'flag-icons'">
+              <div>
+                <span class="flag-icon" :class="`fi fi-${getFlag(answers[cell - 1].country).value}`"></span>
+              </div>
+            </template>
 
-              <template v-else>
-                <div class="flag-icon"><img :src="getFlag(answers[cell - 1]).value"></div>
-              </template>
-            </div>
-
-            <div v-if="answers[cell - 1]" class="cell-answer">
-              {{ answers[cell - 1] }} {{ answersMessages[cell - 1] }}
+            <template v-else>
+              <div class="flag-icon">
+                <img :src="getFlag(answers[cell - 1].country).value">
+              </div>
+            </template>
+           </div>
+            <!-- Сама страна-->
+            <div v-if="answers[cell - 1]" class="cell-answer":class="{
+              filled: answers[index],
+              correct: answers[index]?.correct === true,
+              wrong: answers[index]?.correct === false
+              }"
+            > 
+              {{ answers[cell - 1].country }}
             </div>
           </div>
         </div>
