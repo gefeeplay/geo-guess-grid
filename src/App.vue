@@ -2,8 +2,7 @@
 import { ref, computed } from "vue";
 import { questions } from "./data/questions";
 import CountryInput from "./components/CountryInput.vue";
-import { countryCodes } from "./data/countryCodes";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
+import FlagShow from "./components/FlagShow.vue";
 
 const rows = 3;
 const cols = 3;
@@ -85,29 +84,6 @@ function handleSelect(country) {
   showModal.value = false;
 }
 
-// Поиск флага выбранной страны
-const getFlag = (countryName) => {
-  const code = countryCodes[countryName];
-
-  // ISO-код найден → flag-icons
-  if (code) {
-    return { type: "flag-icons", value: code };
-  }
-
-  // Локальный svg
-  try {
-    const url = new URL(
-      `./assets/FlagsNoInISO/${countryName}.svg`,
-      import.meta.url
-    ).href;
-
-    return { type: "local", value: url };
-  } catch (e) {
-    console.warn("Флаг не найден:", countryName);
-    return { type: "local", value: "" };
-  }
-};
-
 // Обновление вопросов
 function refreshQuestions() {
   const newSet = getRandomUniqueQuestions(6);
@@ -156,19 +132,10 @@ function refreshQuestions() {
             }">
 
             <!-- Флаг страны-->
-           <div v-if="answers[cell - 1]">
-            <template v-if="getFlag(answers[cell - 1].country).type === 'flag-icons'">
-              <div>
-                <span class="flag-icon" :class="`fi fi-${getFlag(answers[cell - 1].country).value}`"></span>
-              </div>
-            </template>
+           <FlagShow  v-if="answers[cell - 1] && answers[cell - 1].country"
+            :country="answers[cell - 1].country"
+            />
 
-            <template v-else>
-              <div class="flag-icon">
-                <img :src="getFlag(answers[cell - 1].country).value">
-              </div>
-            </template>
-           </div>
             <!-- Сама страна-->
             <div v-if="answers[cell - 1]" class="cell-answer":class="{
               filled: answers[index],
