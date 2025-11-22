@@ -135,19 +135,19 @@ function refreshQuestions() {
       <div class="pg-con">
         <!-- Вопросы вертикально-->
         <div class="cells-quest">
-          <div v-for="(question, index) in randomQuestionsLeft" :key="'top-' + index" class="cell-item-quest">
+          <div v-for="question in randomQuestionsLeft" class="cell-item-quest">
             {{ question[0] }}
           </div>
         </div>
 
         <div class="cells-ans">
           <!-- Вопросы горизонтально-->
-          <div v-for="(question, index) in randomQuestionsTop" :key="'bottom-' + index" class="cell-item-quest">
+          <div v-for="question in randomQuestionsTop" class="cell-item-quest">
             {{ question[0] }}
           </div>
           <!-- Ответы-->
           <div class="cell-item"
-            v-for="cell in cells"
+            v-for="(cell, index) in cells"
             @click="handleClick(cell)"
             :class="{
               filled: answers[cell - 1],
