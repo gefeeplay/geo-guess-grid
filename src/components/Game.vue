@@ -4,6 +4,7 @@ import { questions } from "../data/questions";
 import CountryInput from "../components/CountryInput.vue";
 import FlagShow from "../components/FlagShow.vue";
 import TopBar from "../components/TopBar.vue";
+import SignInUp from "./SignInUp.vue";
 
 const rows = 3;
 const cols = 3;
@@ -82,13 +83,17 @@ function refreshQuestions() {
   points.value = 0;
   mistakes.value = 0;
 }
+
+const showAuth = ref(false);
 </script>
 
 <template>
   <div class="full-page">
     <CountryInput :show="showModal" @close="closeModal" @select="handleSelect" />
+    
+    <TopBar @open-auth="showAuth = true" />
 
-    <TopBar />
+    <SignInUp v-if="showAuth" @close="showAuth = false" />
 
     <div class="center-container">
       <div class="title">
