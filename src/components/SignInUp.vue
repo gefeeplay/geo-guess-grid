@@ -55,26 +55,28 @@ async function submit() {
         if (isSignIn.value) {
             // LOGIN
             const res = await loginUser(email.value, password.value);
-            const token = res.data.token;
+            const token = res.data.access_token;
 
             localStorage.setItem('jwt', token);
 
             userStore.setEmail(email.value);
             emit("auth-success");
-            emit("close");
+            isLogin.value = true
+            setTimeout( () => emit("close"), 1000)
         } else {
             // REGISTER
             await registerUser(email.value, password.value);
 
             // сразу логиним после регистрации
             const res = await loginUser(email.value, password.value);
-            const token = res.data.token;
+            const token = res.data.access_token;
 
             localStorage.setItem('jwt', token);
 
             userStore.setEmail(email.value);
             emit("auth-success");
-            emit("close");
+            isLogin.value = true
+            setTimeout( () => emit("close"), 1000)
         }
     } catch (err) {
         errorMsg.value = err.response?.data?.detail || 'Ошибка при запросе';
@@ -82,6 +84,7 @@ async function submit() {
 }
 
 const errorMsg = ref('');
+const isLogin = ref(false);
 
 </script>
 
@@ -150,6 +153,10 @@ const errorMsg = ref('');
                     <button v-else class="button-submit" :disabled="!formValid" @click.prevent="submit">
                         Sign Up
                     </button>
+
+                    <p class="info p" v-if="isLogin" style="color: green;">
+                        Авторизация успешна!
+                    </p>
 
                     <p class="info p" v-if="errorMsg" style="color: red;">
                         {{ errorMsg }}

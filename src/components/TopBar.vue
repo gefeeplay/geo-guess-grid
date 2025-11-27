@@ -7,7 +7,7 @@ const userStore = useUserStore();
 const emit = defineEmits(['open-auth']);
 
 function onProfileClick() {
-  if (!username.value) {
+  if (!userStore.username) {
     emit('open-auth'); 
   } else {
     console.log("Открыть профиль пользователя");
