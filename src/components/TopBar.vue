@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import { useUserStore } from '../stores/userStore.js';
 
-const username = ref('');
+const userStore = useUserStore();
+
 const emit = defineEmits(['open-auth']);
 
 function onProfileClick() {
@@ -31,7 +33,7 @@ function onProfileClick() {
         </div>
         <div class="profile" @click="onProfileClick">
         <span class="material-symbols-outlined">person</span>
-        <span>{{ username || 'Войти' }}</span>
+        <span>{{ userStore.username || 'Войти' }}</span>
       </div>
         
       </div>      

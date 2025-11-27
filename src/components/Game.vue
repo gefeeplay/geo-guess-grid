@@ -85,6 +85,7 @@ function refreshQuestions() {
 }
 
 const showAuth = ref(false);
+
 </script>
 
 <template>
@@ -93,7 +94,7 @@ const showAuth = ref(false);
     
     <TopBar @open-auth="showAuth = true" />
 
-    <SignInUp v-if="showAuth" @close="showAuth = false" />
+    <SignInUp v-if="showAuth" @close="showAuth=false" @auth-success="onAuth" />
 
     <div class="center-container">
       <div class="title">

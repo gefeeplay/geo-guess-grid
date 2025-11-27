@@ -1,11 +1,14 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { registerUser, loginUser } from '../api/auth.js';
+import { useUserStore } from '../stores/userStore.js';
 
-const emit = defineEmits(['close']);
+const userStore = useUserStore();
+
+const emit = defineEmits(['close', 'auth-success']);
 
 // режим формы: 'signin' или 'signup'
 const mode = ref('signin');
-
 const isSignIn = computed(() => mode.value === 'signin');
 
 function toggleMode() {
@@ -39,12 +42,47 @@ const formValid = computed(() => {
     if (isSignIn.value) {
         return email.value.length > 0 && password.value.length > 0;
     }
-    return (
-        email.value.length > 0 &&
-        passwordValid.value &&
-        passwordsMatch.value
-    );
+    return email.value.length > 0 && passwordValid.value && passwordsMatch.value;
 });
+
+// ===============================
+//         ОТПРАВКА ФОРМЫ
+// ===============================
+async function submit() {
+    errorMsg.value = '';
+
+    try {
+        if (isSignIn.value) {
+            // LOGIN
+            const res = await loginUser(email.value, password.value);
+            const token = res.data.token;
+
+            localStorage.setItem('jwt', token);
+
+            userStore.setEmail(email.value);
+            emit("auth-success");
+            emit("close");
+        } else {
+            // REGISTER
+            await registerUser(email.value, password.value);
+
+            // сразу логиним после регистрации
+            const res = await loginUser(email.value, password.value);
+            const token = res.data.token;
+
+            localStorage.setItem('jwt', token);
+
+            userStore.setEmail(email.value);
+            emit("auth-success");
+            emit("close");
+        }
+    } catch (err) {
+        errorMsg.value = err.response?.data?.detail || 'Ошибка при запросе';
+    }
+}
+
+const errorMsg = ref('');
+
 </script>
 
 <template>
@@ -70,7 +108,7 @@ const formValid = computed(() => {
                         <label>Password </label>
                     </div>
                     <div class="inputForm">
-                        <span class="material-symbols-outlined">{{ showPassword ? 'lock_open_right' : 'lock'}}</span>
+                        <span class="material-symbols-outlined">{{ showPassword ? 'lock_open_right' : 'lock' }}</span>
 
                         <input :type="showPassword ? 'text' : 'password'" class="input"
                             placeholder="Enter your Password" v-model="password">
@@ -87,14 +125,15 @@ const formValid = computed(() => {
 
                     <!-- CONFIRM PASSWORD (только в режиме регистрации) -->
                     <div v-if="!isSignIn">
-                        <div class="flex-column">
+                        <div class="flex-column" style="margin-bottom: 10px;">
                             <label>Confirm Password</label>
                         </div>
 
                         <div class="inputForm">
-                            <span class="material-symbols-outlined">{{ showPassword ? 'lock_open_right' : 'lock'}}</span>
+                            <span class="material-symbols-outlined">{{ showPassword ? 'lock_open_right' :
+                                'lock'}}</span>
 
-                            <input :type="showPassword? 'text' : 'password'" class="input"
+                            <input :type="showPassword ? 'text' : 'password'" class="input"
                                 placeholder="Repeat Password" v-model="passwordConfirm">
                         </div>
 
@@ -104,9 +143,17 @@ const formValid = computed(() => {
                         </p>
                     </div>
 
-                    <button class="button-submit" :disabled="!formValid">
-                        {{ isSignIn ? 'Sign In' : 'Sign Up' }}
+                    <button v-if="isSignIn" class="button-submit" :disabled="!formValid" @click.prevent="submit">
+                        Sign In
                     </button>
+
+                    <button v-else class="button-submit" :disabled="!formValid" @click.prevent="submit">
+                        Sign Up
+                    </button>
+
+                    <p class="info p" v-if="errorMsg" style="color: red;">
+                        {{ errorMsg }}
+                    </p>
 
                     <p class="p">
                         {{ isSignIn ? "Don't have an account?" : "Already have an account?" }}
@@ -219,8 +266,8 @@ input:-webkit-autofill:active {
 }
 
 .button-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .p {
@@ -230,7 +277,7 @@ input:-webkit-autofill:active {
     margin: 5px 0;
 }
 
-.info{
+.info {
     color: red;
     font-size: 12px;
     margin: 0 0 5px 0;
