@@ -4,13 +4,13 @@ import { useUserStore } from '../stores/userStore.js';
 
 const userStore = useUserStore();
 
-const emit = defineEmits(['open-auth']);
+const emit = defineEmits(['open-auth', 'open-profile']);
 
 function onProfileClick() {
   if (!userStore.username) {
     emit('open-auth'); 
   } else {
-    console.log("Открыть профиль пользователя");
+    emit('open-profile');
   }
 }
 </script>
@@ -32,10 +32,9 @@ function onProfileClick() {
           <span class="material-symbols-outlined">trophy</span>
         </div>
         <div class="profile" @click="onProfileClick">
-        <span class="material-symbols-outlined">person</span>
-        <span>{{ userStore.username || 'Войти' }}</span>
-      </div>
-        
+          <span class="material-symbols-outlined">person</span>
+          <span>{{ userStore.username || 'Войти' }}</span>
+        </div>  
       </div>      
     </div>
 </template>

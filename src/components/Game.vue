@@ -5,6 +5,7 @@ import CountryInput from "../components/CountryInput.vue";
 import FlagShow from "../components/FlagShow.vue";
 import TopBar from "../components/TopBar.vue";
 import SignInUp from "./SignInUp.vue";
+import Profile from "./Profile.vue";
 
 const rows = 3;
 const cols = 3;
@@ -85,6 +86,7 @@ function refreshQuestions() {
 }
 
 const showAuth = ref(false);
+const showProfile = ref(false);
 
 </script>
 
@@ -92,9 +94,10 @@ const showAuth = ref(false);
   <div class="full-page">
     <CountryInput :show="showModal" @close="closeModal" @select="handleSelect" />
     
-    <TopBar @open-auth="showAuth = true" />
+    <TopBar @open-auth="showAuth = true" @open-profile="showProfile = true"/>
 
     <SignInUp v-if="showAuth" @close="showAuth=false" @auth-success="onAuth" />
+    <Profile v-if="showProfile" @close="showProfile = false" />
 
     <div class="center-container">
       <div class="title">
