@@ -6,12 +6,14 @@ import './style.css'
 import App from './App.vue'
 import Game from './components/Game.vue'
 import Manual from './components/Manual.vue'
+import VerifyEmail from './components/VerifyEmail.vue'
 
 const router = createRouter({
   history: createWebHistory('/geo-guess-grid/'),
   routes: [
     { path: '/', name: 'Game', component: Game },
     { path: '/manual', name: 'Manual', component: Manual },
+    { path: '/verify', name: 'VerifyEmail', component: VerifyEmail }
   ]
 })
 

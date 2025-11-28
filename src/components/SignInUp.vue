@@ -50,6 +50,7 @@ const formValid = computed(() => {
 // ===============================
 async function submit() {
     errorMsg.value = '';
+    successMsg.value = '';
 
     try {
         if (isSignIn.value) {
@@ -65,10 +66,11 @@ async function submit() {
             setTimeout( () => emit("close"), 1000)
         } else {
             // REGISTER
-            await registerUser(email.value, password.value);
+            const res = await registerUser(email.value, password.value);
 
+            successMsg.value = res.data.message
             // сразу логиним после регистрации
-            const res = await loginUser(email.value, password.value);
+            /*const res = await loginUser(email.value, password.value);
             const token = res.data.access_token;
 
             localStorage.setItem('jwt', token);
@@ -76,13 +78,14 @@ async function submit() {
             userStore.setEmail(email.value);
             emit("auth-success");
             isLogin.value = true
-            setTimeout( () => emit("close"), 1000)
+            setTimeout( () => emit("close"), 1000)*/
         }
     } catch (err) {
         errorMsg.value = err.response?.data?.detail || 'Ошибка при запросе';
     }
 }
 
+const successMsg = ref('');
 const errorMsg = ref('');
 const isLogin = ref(false);
 
@@ -160,6 +163,10 @@ const isLogin = ref(false);
 
                     <p class="info p" v-if="errorMsg" style="color: red;">
                         {{ errorMsg }}
+                    </p>
+                    <p class="info p" v-if="successMsg" style="color: green;">
+                        {{ successMsg }} Вы можете войти в систему. <br>
+                        Для полного доступа к контенту подтвердите ваш email.
                     </p>
 
                     <p class="p">
