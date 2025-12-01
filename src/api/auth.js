@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
     baseURL: 'http://127.0.0.1:8000',  // поменяй на свой backend
+    /*baseURL: 'http://89.111.143.216:8000'*/
 });
 
 // Добавляем интерцептор для автоматической подстановки токена
@@ -34,6 +35,12 @@ export function loginUser(email, password) {
     });
 }
 
+// GET USER INFO
 export function getUserInfo() {
     return api.get('/auth/me');
+}
+
+// GET USER STATISTICS
+export function getUserStatistics(){
+    return api.get('/statistics/')
 }

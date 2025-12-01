@@ -35,6 +35,22 @@ const handleLogout = () => {
         </div>
       </div>
 
+      <div class="profile-header">
+        <h2>Статистика</h2>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-item">
+          <label>Выиграно/Сыграно игр:</label>
+          <span>{{ userStore.games_won }} / {{ userStore.games }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Выиграно/Сыграно дуэлей:</label>
+          <span>{{ userStore.duels_won }} / {{ userStore.duels }}</span>
+        </div>
+      </div>
+
       <div class="profile-actions">
         <button 
           class="logout-button" 

@@ -7,9 +7,15 @@ export const useUserStore = defineStore('userStore', () => {
     const jwtToken = ref(localStorage.getItem('jwt') || '');
     const isLoading = ref(false);
 
+    const games_won = ref(NaN);
+    const games = ref(NaN);
+    const duels_won = ref(NaN);
+    const duels= ref(NaN);
+
     const username = computed(() => {
         if (!email.value) return '';
-        return email.value.split('@')[0];
+        const name = email.value.split('@')[0] // до "@"
+        return name.substring(0,7); // нужно вернуть не более 7 символов
     });
 
     const isAuthenticated = computed(() => !!jwtToken.value);
@@ -22,6 +28,13 @@ export const useUserStore = defineStore('userStore', () => {
     function setToken(token) {
         jwtToken.value = token;
         localStorage.setItem('jwt', token);
+    }
+
+    function setStatistics(stats) {
+        games_won.value = stats.games_won;
+        games.value = stats.games
+        duels_won.value = stats.duels_won
+        duels.value =  stats.duels
     }
 
     function clearAuth() {
@@ -53,11 +66,16 @@ export const useUserStore = defineStore('userStore', () => {
 
     return { 
         email, 
-        username, 
+        username,
+        games_won,
+        games,      
+        duels_won, 
+        duels,
         jwtToken,
         isAuthenticated,
         isLoading,
-        setEmail, 
+        setEmail,
+        setStatistics, 
         setToken,
         clearAuth,
         checkAuth

@@ -1,16 +1,25 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '../stores/userStore.js';
+import { getUserStatistics } from '../api/auth.js';
 
 const userStore = useUserStore();
 
 const emit = defineEmits(['open-auth', 'open-profile']);
 
-function onProfileClick() {
+async function onProfileClick() {
   if (!userStore.username) {
-    emit('open-auth'); 
+    emit('open-auth');
+    
   } else {
     emit('open-profile');
+    const res = await getUserStatistics();
+    if (res.status === 200) {
+        userStore.setStatistics(res.data);
+    }
+    else {
+        console.error('Failed to fetch user statistics:', res);
+    } 
   }
 }
 </script>
