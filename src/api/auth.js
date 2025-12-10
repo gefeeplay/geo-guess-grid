@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000',  // поменяй на свой backend
+    /*baseURL: 'http://127.0.0.1:8000',*/  // поменяй на свой backend
     /*baseURL: 'http://89.111.143.216:8000'*/
+    baseURL: 'https://bbakaq150tp3fcrq4uan.containers.yandexcloud.net'
 });
 
 // Добавляем интерцептор для автоматической подстановки токена
@@ -10,7 +11,7 @@ api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('jwt');
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers['X-Auth-Token'] = token;
         }
         return config;
     },
