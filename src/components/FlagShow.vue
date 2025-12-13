@@ -44,4 +44,9 @@ const flag = computed(() => getFlag(props.country));
 </template>
 
 <style scoped>
+.flag-icon,
+.flag-icon img {
+  width: 48px !important;
+  height: 36px;
+}
 </style>
