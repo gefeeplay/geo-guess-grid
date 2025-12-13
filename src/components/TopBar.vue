@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useUserStore } from '../stores/userStore.js';
 import { getUserStatistics } from '../api/auth.js';
+import { Icon } from '@iconify/vue';
 
 const userStore = useUserStore();
 
@@ -25,54 +26,102 @@ async function onProfileClick() {
 </script>
 
 <template>
-    <div class="nav-container">
-      <div class="nav-con">
-        <router-link to="/manual" class="nav-item link">
-            <span class="material-symbols-outlined">dictionary</span>
-            <span style="text-decoration: underline;">Справочник</span>
-        </router-link>
-        <div class="nav-item">
-           <span class="material-symbols-outlined">swords</span>
-            <span style="text-decoration: underline;">Дуэли</span>
+  <div class="nav-container">
+    <div class="nav-left">
+      <div class="logo-block">
+        <div class="nav-item logo">
+          <span class="material-symbols-outlined">public</span>
+          <span class="underlined-text">GeoMatch</span>
         </div>
+        <div class="subtitle">Игра в категории стран</div>
       </div>
-      <div class="nav-con">
-        <div class="achievements">
-          <span class="material-symbols-outlined">trophy</span>
-        </div>
-        <div class="profile" @click="onProfileClick">
-          <span class="material-symbols-outlined">person</span>
-          <span>{{ userStore.username || 'Войти' }}</span>
-        </div>  
-      </div>      
     </div>
+
+    <div class="nav-con">
+      <router-link to="/manual" class="nav-item link">
+        <span class="material-symbols-outlined">dictionary</span>
+        <span style="text-decoration: underline;">Справочник</span>
+      </router-link>
+
+      <div class="nav-item">
+        <span class="material-symbols-outlined">swords</span>
+        <span style="text-decoration: underline;">Дуэли</span>
+      </div>
+    </div>
+
+    <div class="nav-con">
+      <div class="achievements">
+        <Icon icon="material-symbols:trophy-rounded" width="24" height="24" color="rgb(216 191 91)"/>
+      </div>
+
+      <div class="profile" @click="onProfileClick">
+        <span class="material-symbols-outlined">person</span>
+        <span>{{ userStore.username || 'Войти' }}</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
 
 .nav-container {
+  background: linear-gradient(90deg, #1c1b33 0%, #322a57 50%, #4b3072 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
-  height: 10%;
-  padding-left:20px;
-} 
+  padding: 12px 20px;
+  height: 70px;
+  color: #E7E6FF; /* основной цвет текста */
+}
+
+.nav-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-left: 25px;
+  margin-top: -2px;
+  color: rgba(255, 255, 255, 0.65);
+}
 
 .nav-con {
   display: flex;
-  gap: 10px;
-  padding-right: 20px;
+  gap: 16px;
+  align-items: center;
 }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.material-symbols-outlined {
+  color: #D6D4FF;
+  font-size: 20px;
+  transition: color 0.15s ease;
+}
+
+/* При наведении текст и иконки могут становиться немного ярче */
+.nav-item:hover span,
+.profile:hover span,
+.achievements:hover span {
+  color: #FFFFFF;
 }
 
 .underlined-text {
+  font-size: 18px;
   text-decoration: underline;
 }
 
@@ -81,35 +130,38 @@ async function onProfileClick() {
   color: inherit;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
-.achievements{
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  width: 32px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #9f7472;
-}
+/* Правый блок */
+.achievements,
 .profile {
-  box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding-left: 5px;
-  height: 40px;
-  width: 125px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #9f7472;
+  gap: 6px;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.profile:hover, .achievements:hover {
-  background-color: #b67876;
-  cursor: pointer;
+.profile:hover,
+.achievements:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.achievements {
+  width: 32px;
+  justify-content: center;
+  padding: 0;
+}
+
+.profile {
+  width: auto;
 }
 </style>
