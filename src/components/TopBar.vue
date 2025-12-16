@@ -39,13 +39,13 @@ async function onProfileClick() {
 
     <div class="nav-con">
       <router-link to="/manual" class="nav-item link">
-        <span class="material-symbols-outlined">dictionary</span>
-        <span style="text-decoration: underline;">Справочник</span>
+        <Icon icon="streamline:dictionary-language-book-remix" class="stat-icon-svg" />
+        <span class="link" style="text-decoration: underline;">Справочник</span>
       </router-link>
 
       <div class="nav-item">
         <span class="material-symbols-outlined">swords</span>
-        <span style="text-decoration: underline;">Дуэли</span>
+        <span class="link" style="text-decoration: underline;">Дуэли</span>
       </div>
     </div>
 
@@ -55,8 +55,8 @@ async function onProfileClick() {
       </div>
 
       <div class="profile" @click="onProfileClick">
-        <span class="material-symbols-outlined">person</span>
-        <span>{{ userStore.username || 'Войти' }}</span>
+        <Icon icon="flowbite:user-solid" width="24" height="24" />
+        <span class="username">{{ userStore.username || 'Войти' }}</span>
       </div>
     </div>
   </div>
@@ -133,6 +133,11 @@ async function onProfileClick() {
   gap: 6px;
 }
 
+.stat-icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Правый блок */
 .achievements,
 .profile {
@@ -162,6 +167,70 @@ async function onProfileClick() {
 }
 
 .profile {
-  width: auto;
+  min-width: 0;
+  max-width: 125px;
+}
+
+.username {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: small;
+}
+
+@media (max-width: 500px) {
+  .nav-container {
+    padding: 6px 10px;
+    height: 50px;
+
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .nav-con {
+    gap: 10px;
+  }
+
+  .nav-item {
+    gap: 4px;
+  }
+
+  .material-symbols-outlined {
+    font-size: 12px;
+  }
+
+  .underlined-text {
+    font-size: 12px;
+  }
+
+  .link {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  /* Правый блок */
+  .achievements,
+  .profile {
+    gap: 4px;
+    height: 24px;
+    padding: 0 4px;
+    border-radius: 6px;
+  }
+
+  .achievements {
+    width: 24px;
+  }
+
+  .profile {
+    width: 75px;
+  }
+
+  .username{
+    font-size: x-small;
+  }
+
 }
 </style>

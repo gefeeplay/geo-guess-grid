@@ -224,6 +224,12 @@ onUnmounted(() => {
   min-height: 100px;
   box-sizing: border-box;
   font-size: small;
+  margin: 0 10px 10px 0;
+  padding: 5px;
+  align-items: center;
+  text-align: center;
+  color: white;
+  background: rgb(100, 100, 150);
 }
 
 .cell-item {
@@ -288,18 +294,6 @@ onUnmounted(() => {
   }
 }
 
-
-
-.cell-item-quest {
-  box-shadow: 3px 3px 10px rgb(90, 90, 135);
-  margin: 0 10px 10px 0;
-  padding: 5px;
-  align-items: center;
-  text-align: center;
-  color: white;
-  background: rgb(100, 100, 150);
-}
-
 .cell-answer {
   text-align: center;
   padding: 0px 5px;
@@ -311,5 +305,40 @@ onUnmounted(() => {
   background: linear-gradient(90deg, #302f52 0%, #322a57 50%, #4b3072 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   height: 10%;
+}
+
+@media (max-width: 500px) {
+  .cells-ans {
+    grid-template-columns: repeat(3, 75px);
+    grid-template-rows: repeat(4, 75px);
+    gap: 5px;
+  }
+
+  .cells-quest {
+    display: grid;
+    grid-template-rows: repeat(3, 75px);
+    max-width: 75px;
+    gap: 5px;
+    margin-top: 105px;
+    margin-right: 10px;
+  }
+
+  .cell-item-quest {
+    border-radius: 5px;
+    min-width: 75px;
+    min-height: 75px;
+    font-size: x-small;
+    margin: 0;
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .cell-item {
+    gap: 5px;
+    border-radius: 5px;
+    min-width: 75px;
+    min-height: 75px;
+    font-size: xx-small;
+  }
 }
 </style>

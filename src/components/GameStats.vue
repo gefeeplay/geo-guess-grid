@@ -40,7 +40,7 @@ const emit = defineEmits(["restart"]);
             </div>
 
             <div class="stat-icon" style="background-color: rgba(52, 101, 69, 0.7); color: #2bef7d;">
-                <Icon icon="material-symbols:star-rounded" width="24" height="24" />
+                <Icon icon="material-symbols:star-rounded" class="stat-icon-svg" />
             </div>
         </div>
 
@@ -53,7 +53,7 @@ const emit = defineEmits(["restart"]);
             </div>
 
             <div class="stat-icon flame" :class="streakLevel">
-                <Icon icon="solar:flame-bold-duotone" width="24" height="24" />
+                <Icon icon="solar:flame-bold-duotone" class="stat-icon-svg" />
             </div>
         </div>
 
@@ -64,7 +64,7 @@ const emit = defineEmits(["restart"]);
                 <div class="stat-value">{{ formattedTime }}</div>
             </div>
             <div class="stat-icon" style="background-color: rgba(61, 64, 139, 0.7); color: #60a5fa;">
-                <Icon icon="majesticons:clock" width="24" height="24" />
+                <Icon icon="majesticons:clock" class="stat-icon-svg" />
             </div>
         </div>
 
@@ -76,7 +76,7 @@ const emit = defineEmits(["restart"]);
             </div>
 
             <div class="stat-icon" style="background-color: rgba(107,74,152,0.7); color: #bb81cc;">
-                <Icon icon="uis:graph-bar" width="24" height="24" />
+                <Icon icon="uis:graph-bar" class="stat-icon-svg" />
             </div>
         </div>
 
@@ -143,13 +143,16 @@ const emit = defineEmits(["restart"]);
 .stat-icon {
     width: 40px;
     height: 40px;
-
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
     font-size: 22px;
+}
 
+.stat-icon-svg {
+  width: 24px;
+  height: 24px;
 }
 
 .stat-text {
@@ -188,6 +191,45 @@ const emit = defineEmits(["restart"]);
   filter: brightness(1.4);
   opacity: 0.95;
   box-shadow: 0 0 12px rgba(251, 146, 60, 0.9);
+}
+
+@media (max-width: 500px) {
+   .cells-stats {
+        margin-top: 10px;
+        gap: 4px;
+    }   
+    
+    .stats-item {
+        height: 50px;
+        width: max(75px, 22%);
+        padding: 0px 5px;
+        margin: 0 8px 8px 0;
+        border-radius: 8px;
+    }
+
+    .stat-left {
+        gap: 4px;
+    }
+
+    .stat-value {
+        font-size: 12px;
+    }
+
+    .stat-icon {
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        font-size: 12px;
+    }
+    
+    .stat-icon-svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .stat-text {
+        font-size: xx-small;
+    }
 }
 
 </style>
