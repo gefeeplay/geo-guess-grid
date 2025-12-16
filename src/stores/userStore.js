@@ -15,7 +15,7 @@ export const useUserStore = defineStore('userStore', () => {
     const username = computed(() => {
         if (!email.value) return '';
         const name = email.value.split('@')[0] // до "@"
-        return name.substring(0,7); // нужно вернуть не более 7 символов
+        return name
     });
 
     const isAuthenticated = computed(() => !!jwtToken.value);
